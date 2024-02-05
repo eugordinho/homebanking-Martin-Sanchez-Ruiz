@@ -34,6 +34,9 @@ public class HomebankingApplication {
 			clientRepository.save( client1 );
 			clientRepository.save( client2 );
 
+			accountrepository.save(account1);
+			accountrepository.save(account2);
+
 
 		};
 	}

@@ -17,4 +17,20 @@ public class AccountDTO {
         this.balance = account.getBalance();
         this.creationDate = account.getCreationDate();
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
 }

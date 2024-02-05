@@ -33,4 +33,8 @@ public class ClientDTO {
     public String getMail() {
         return mail;
     }
+
+    public Set<AccountDTO> getAccounts() {
+        return accounts;
+    }
 }
