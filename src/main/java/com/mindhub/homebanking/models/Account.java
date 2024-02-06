@@ -23,6 +23,9 @@ public class Account {
     @OneToMany( mappedBy = "accountOrigin", fetch = FetchType.EAGER)
     private Set<Transaction> transactionSet = new HashSet<>();
 
+    @ManyToMany(mappedBy = "accounts")
+    private Set<Loan> loans = new HashSet<>();
+
     public Account(String number, double balance, LocalDate creationDate) {
         this.number = number;
         this.balance = balance;
@@ -90,4 +93,14 @@ public class Account {
         transaction.setAccountOrigin( this );
         transactionSet.add( transaction );
     }
+
+    public Set<Loan> getLoans() {
+        return loans;
+    }
+
+    public void addLoan( Loan loan ){
+        loans.add( loan );
+        loan.getAccounts().add( this );
+    }
+
 }
