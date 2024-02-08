@@ -13,14 +13,15 @@ public class Loan {
     private Long id;
     private String name;
     private double maxAmount;
-    private List<Integer> payments;
+    @ElementCollection
+    private Set<Integer> payments = new HashSet<>();
     @ManyToMany
     private Set<Account> accounts = new HashSet<>();
 
     public Loan() {
     }
 
-    public Loan(String name, double maxAmount, List<Integer> payments) {
+    public Loan(String name, double maxAmount, Set<Integer> payments) {
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
@@ -46,11 +47,11 @@ public class Loan {
         this.maxAmount = maxAmount;
     }
 
-    public List<Integer> getPayments() {
+    public Set<Integer> getPayments() {
         return payments;
     }
 
-    public void setPayments(List<Integer> payments) {
+    public void setPayments(Set<Integer> payments) {
         this.payments = payments;
     }
 
