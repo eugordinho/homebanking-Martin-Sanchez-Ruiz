@@ -2,6 +2,7 @@ package com.mindhub.homebanking.models;
 
 import jakarta.persistence.*;
 
+@Entity
 public class ClientLoan {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -18,7 +19,7 @@ public class ClientLoan {
     public ClientLoan() {
     }
 
-    public ClientLoan(double amount, int payments) {
+    public ClientLoan( double amount, int payments) {
         this.amount = amount;
         this.payments = payments;
     }

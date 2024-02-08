@@ -23,7 +23,7 @@ public class ClientController {
     private ClientRepository clientrepository;
 
     @GetMapping
-    public ResponseEntity<List<ClientDTO>> getAllClients(ClientRepository clientRepository){
+    public ResponseEntity<List<ClientDTO>> getAllClients(){
         List<Client> client = clientrepository.findAll();
 
         return new ResponseEntity<>(client.stream().map(ClientDTO::new).collect(java.util.stream.Collectors.toList()), HttpStatus.OK);

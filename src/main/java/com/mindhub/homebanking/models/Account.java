@@ -19,12 +19,8 @@ public class Account {
     @ManyToOne( fetch = FetchType.EAGER )
     @JoinColumn( name = "Client_Id")
     private Client clientOwner;
-
     @OneToMany( mappedBy = "accountOrigin", fetch = FetchType.EAGER)
     private Set<Transaction> transactionSet = new HashSet<>();
-
-    @ManyToMany(mappedBy = "accounts")
-    private Set<Loan> loans = new HashSet<>();
 
     public Account(String number, double balance, LocalDate creationDate) {
         this.number = number;
@@ -92,15 +88,6 @@ public class Account {
     public void addTransaction( Transaction transaction ){
         transaction.setAccountOrigin( this );
         transactionSet.add( transaction );
-    }
-
-    public Set<Loan> getLoans() {
-        return loans;
-    }
-
-    public void addLoan( Loan loan ){
-        loans.add( loan );
-        loan.getAccounts().add( this );
     }
 
 }

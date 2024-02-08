@@ -18,7 +18,7 @@ public class ClientDTO {
         this.lastName = client.getLastName();
         this.mail = client.getMail();
         this.accounts = client.getAccountSet().stream().map(AccountDTO::new).collect(Collectors.toSet());
-        this.loans = client
+        this.loans = client.getClientloans().stream().map( ClientLoanDTO::new).collect(Collectors.toSet());
     }
 
     public long getId() {
@@ -39,5 +39,9 @@ public class ClientDTO {
 
     public Set<AccountDTO> getAccounts() {
         return accounts;
+    }
+
+    public Set<ClientLoanDTO> getLoans() {
+        return loans;
     }
 }
