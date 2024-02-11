@@ -12,10 +12,12 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName, lastName, mail;
-    @OneToMany (mappedBy = "clientOwner", fetch = FetchType.EAGER)
+    @OneToMany ( mappedBy = "clientOwner", fetch = FetchType.EAGER )
     private Set<Account> accountSet = new HashSet<>();
     @OneToMany( mappedBy = "client")
     private Set<ClientLoan> clientloans = new HashSet<>();
+    @OneToMany( mappedBy = "cardHolder", fetch = FetchType.EAGER )
+    private Set<Card> cards = new HashSet<>();
 
     public Client(  ) {
     }
@@ -78,6 +80,11 @@ public class Client {
 
     public Set<Loan> getClientloans( ClientLoan clientloan ){
         return clientloans.stream().map( loan -> loan.getLoan()).collect( Collectors.toSet());
+    }
+
+    public void addCards( Card card ){
+        card.setCardHolder( this );
+        cards.add( card );
     }
 
 }
