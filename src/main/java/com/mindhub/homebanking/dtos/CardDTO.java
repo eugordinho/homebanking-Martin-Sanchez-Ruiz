@@ -5,11 +5,12 @@ import com.mindhub.homebanking.enums.CardType;
 import com.mindhub.homebanking.models.Card;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CardDTO {
     private Long id;
     private String cardHoleder, number, cvv;
-    private LocalDate fromDate, thruDate;
+    private LocalDateTime fromDate, thruDate;
     private CardColor color;
     private CardType type;
 
@@ -40,11 +41,11 @@ public class CardDTO {
         return cvv;
     }
 
-    public LocalDate getFromDate() {
+    public LocalDateTime getFromDate() {
         return fromDate;
     }
 
-    public LocalDate getThruDate() {
+    public LocalDateTime getThruDate() {
         return thruDate;
     }
 

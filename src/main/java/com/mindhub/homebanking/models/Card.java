@@ -5,6 +5,7 @@ import com.mindhub.homebanking.enums.CardType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Card {
@@ -12,7 +13,7 @@ public class Card {
     @GeneratedValue ( strategy = GenerationType.IDENTITY)
     private Long id;
     private String number, cvv;
-    private LocalDate fromDate, thruDate;
+    private LocalDateTime fromDate, thruDate;
     private CardColor colorType;
     private CardType cardType;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -26,8 +27,8 @@ public class Card {
         this.cvv = cvv;
         this.colorType = colorType;
         this.cardType = cardType;
-        this.fromDate = LocalDate.now();
-        this.thruDate = LocalDate.now().plusYears(5);
+        this.fromDate = LocalDateTime.now();
+        this.thruDate = LocalDateTime.now().plusYears(5);
     }
 
     public Long getId() {
@@ -54,11 +55,11 @@ public class Card {
         return cardType;
     }
 
-    public LocalDate getFromDate() {
+    public LocalDateTime getFromDate() {
         return fromDate;
     }
 
-    public LocalDate getThruDate() {
+    public LocalDateTime getThruDate() {
         return thruDate;
     }
 
