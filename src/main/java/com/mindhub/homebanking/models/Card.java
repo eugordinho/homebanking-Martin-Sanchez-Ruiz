@@ -46,12 +46,28 @@ public class Card {
         return cvv;
     }
 
+    public CardColor getColorType() {
+        return colorType;
+    }
+
+    public CardType getCardType() {
+        return cardType;
+    }
+
     public LocalDate getFromDate() {
         return fromDate;
     }
 
     public LocalDate getThruDate() {
         return thruDate;
+    }
+
+    public void setColorType(CardColor colorType) {
+        this.colorType = colorType;
+    }
+
+    public void setCardType(CardType cardType) {
+        this.cardType = cardType;
     }
 
     public void setCardHolder(Client cardHolder) {

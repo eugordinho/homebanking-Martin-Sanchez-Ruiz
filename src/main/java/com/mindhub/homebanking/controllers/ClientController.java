@@ -29,7 +29,7 @@ public class ClientController {
         return new ResponseEntity<>(client.stream().map(ClientDTO::new).collect(java.util.stream.Collectors.toList()), HttpStatus.OK);
     }
 
-    @GetMapping( "/{id}")
+    @GetMapping( "/{id}" )
     public ResponseEntity<ClientDTO> getClientById( @PathVariable Long id ){
         Client client = clientrepository.findById(id).orElse(null);
 

@@ -86,5 +86,8 @@ public class Client {
         card.setCardHolder( this );
         cards.add( card );
     }
+    public Set<Card> getCards ( ) {
+        return cards;
+    }
 
 }
