@@ -83,9 +83,10 @@ public class Client {
         return clientloans.stream().map( loan -> loan.getLoan()).collect( Collectors.toSet());
     }
 
-    public void addCards( Card card ){
-        card.setCardHolder( this );
-        cards.add( card );
+    public void addCards(Card card){
+        card.setClient(this);
+        this.cards.add(card);
+        card.setCardHolder(card.getClient().getFirstName() + " " + card.getClient().getLastName());
     }
     public Set<Card> getCards ( ) {
         return cards;

@@ -1,12 +1,15 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.dtos.LoginDTO;
 import com.mindhub.homebanking.dtos.RegisterDTO;
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.services.JwtUtilService;
+import com.mindhub.homebanking.securityServices.JwtUtilService;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.utils.RandomNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -32,20 +37,25 @@ public class AuthController {
     private JwtUtilService jwtUtilService;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RandomNumber randomNumber;
 
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){
         try {
-            if(clientRepository.findByEmail(loginDTO.email()) == null){
+            if(clientService.getClientByEmail(loginDTO.email()) == null){
                 return new ResponseEntity<>("The email entered is not valid", HttpStatus.FORBIDDEN);
             }
 
-            if(!passwordEncoder.matches(loginDTO.password(), clientRepository.findByEmail(loginDTO.email()).getPassword())) {
+            if(!passwordEncoder.matches(loginDTO.password(), clientService.getClientByEmail(loginDTO.email()).getPassword())) {
                 return new ResponseEntity<>("The password entered is not valid", HttpStatus.FORBIDDEN);
             }
 
@@ -79,7 +89,7 @@ public class AuthController {
                 return new ResponseEntity<>("The password field cannot be empty", HttpStatus.FORBIDDEN);
             }
 
-            if(clientRepository.findByEmail(registerDTO.email()) != null){
+            if(clientService.getClientByEmail(registerDTO.email()) != null){
                 return new ResponseEntity<>("The email entered already exists in the database", HttpStatus.FORBIDDEN);
             }
 
@@ -96,7 +106,18 @@ public class AuthController {
                     registerDTO.lastName(),
                     registerDTO.email(),
                     passwordEncoder.encode(registerDTO.password()));
-            clientRepository.save(client);
+
+            String accountNumber;
+            do {
+                accountNumber = "VIN" + RandomNumber.getRandomNumber(0, 100000000);
+            } while (accountService.getAccountByNumber(accountNumber) != null);
+
+            Account account = new Account(accountNumber, 0, LocalDate.now());
+
+            client.addAccount(account);
+            clientService.saveClient(client);
+            accountService.saveAccount(account);
+
             return new ResponseEntity<> ("Client created", HttpStatus.CREATED);
 
         } catch (Exception e){
@@ -112,10 +133,10 @@ public class AuthController {
 
     }
 
-    @GetMapping("/current")
+/*    @GetMapping("/current")
     public ResponseEntity<?> getClient(){
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userMail);
+        Client client = clientService.getClientByEmail(userMail);
         return ResponseEntity.ok(new ClientDTO(client));
-    }
+    }*/
 }

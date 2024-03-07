@@ -13,30 +13,32 @@ public class Card {
     @GeneratedValue ( strategy = GenerationType.IDENTITY)
     private Long id;
     private String number, cvv;
-    private LocalDateTime fromDate, thruDate;
+    private LocalDate fromDate, thruDate;
     private CardColor colorType;
     private CardType cardType;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn( name = "Client_id")
-    private Client cardHolder;
+    private Client client;
+
+    private String cardHolder;
 
     public Card(){}
 
-    public Card( String number, String cvv, CardColor colorType, CardType cardType) {
+    public Card(String number, String cvv, CardColor colorType, CardType cardType, LocalDate fromDate) {
         this.number = number;
         this.cvv = cvv;
         this.colorType = colorType;
         this.cardType = cardType;
-        this.fromDate = LocalDateTime.now();
-        this.thruDate = LocalDateTime.now().plusYears(5);
+        this.fromDate = fromDate;
+        this.thruDate = LocalDate.now().plusYears(5);
     }
 
     public Long getId() {
         return id;
     }
 
-    public Client getCardHolder() {
-        return cardHolder;
+    public Client getClient() {
+        return client;
     }
 
     public String getNumber() {
@@ -55,11 +57,11 @@ public class Card {
         return cardType;
     }
 
-    public LocalDateTime getFromDate() {
+    public LocalDate getFromDate() {
         return fromDate;
     }
 
-    public LocalDateTime getThruDate() {
+    public LocalDate getThruDate() {
         return thruDate;
     }
 
@@ -71,8 +73,8 @@ public class Card {
         this.cardType = cardType;
     }
 
-    public void setCardHolder(Client cardHolder) {
-        this.cardHolder = cardHolder;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public void setNumber(String number) {
@@ -83,4 +85,11 @@ public class Card {
         this.cvv = cvv;
     }
 
+    public String getCardHolder() {
+        return cardHolder;
+    }
+
+    public void setCardHolder(String cardHolder) {
+        this.cardHolder = cardHolder;
+    }
 }

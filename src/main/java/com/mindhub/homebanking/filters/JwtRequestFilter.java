@@ -1,6 +1,6 @@
 package com.mindhub.homebanking.filters;
 
-import com.mindhub.homebanking.services.JwtUtilService;
+import com.mindhub.homebanking.securityServices.JwtUtilService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtUtilService jwtUtilService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authorizationHeader = request.getHeader("Authorization");
+        final String authorizationHeader = request.getHeader("Authorization"); //??
         String userName = null;
         String jwt = null;
 
@@ -33,10 +33,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             userName = jwtUtilService.extractUsername(jwt);
         }
 
+        //SI NO TENGO GENERADO UN USUARIO EN EL CONTEXTO DE LA APLICACIÓN, GENERALO
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
 
-            if (jwtUtilService.validateToken(jwt,userDetails)){
+            if (jwtUtilService.validateToken(jwt,userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));;
@@ -47,6 +48,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-
 }

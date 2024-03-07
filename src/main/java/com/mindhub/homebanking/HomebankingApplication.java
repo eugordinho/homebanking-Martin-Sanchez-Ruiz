@@ -5,16 +5,22 @@ import com.mindhub.homebanking.enums.CardType;
 import com.mindhub.homebanking.enums.TransactionType;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @SpringBootApplication
 public class HomebankingApplication {
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
  	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
@@ -25,15 +31,17 @@ public class HomebankingApplication {
 									  TransactionRepository transactionrepository, LoanRepository loanRepository,
 									  ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
 		return args -> {
-			Client client1 = new Client("Melba", "Morel","melba@mindhub.com");
-			Client client2 = new Client("Martin", "Sanchez","martinsr@mindhub.com");
+			Client client1 = new Client("Melba", "Morel","melba@mindhub.com", passwordEncoder.encode("Melba1234"));
+			Client client2 = new Client("Martin", "Sanchez","martinsr@mindhub.com", passwordEncoder.encode("Tin1234") );
 
+			clientRepository.save( client1 );
+			clientRepository.save( client2 );
 
 			Account account1 = new Account( "1", 8000.0, LocalDate.now());
 			Account account2 = new Account( "2", 7000.5, LocalDate.now().plusDays(1));
 
-			Transaction transaction1 = new Transaction(-500.4, "transferencia", TransactionType.DEBIT);
-			Transaction transaction2 = new Transaction(300, "deposito", TransactionType.CREDIT);
+			Transaction transaction1 = new Transaction(-500.4, "transferencia", LocalDateTime.now(), TransactionType.DEBIT);
+			Transaction transaction2 = new Transaction(300, "deposito", LocalDateTime.now(),TransactionType.CREDIT);
 
 			client1.addAccount( account1 );
 			client1.addAccount( account2 );
@@ -54,8 +62,8 @@ public class HomebankingApplication {
 			loan1.addClientLoan( clientLoan1 );
 			loan2.addClientLoan( clientLoan2 );
 
-			Card card1 = new Card("1234-1234-1234-1234", "007", CardColor.GOLD, CardType.CREDIT);
-			Card card2 = new Card("4567-4567-4567-4567","777", CardColor.TITANIUM, CardType.DEBIT);
+			Card card1 = new Card("1234-1234-1234-1234", "007", CardColor.GOLD, CardType.CREDIT, LocalDate.now());
+			Card card2 = new Card("4567-4567-4567-4567","777", CardColor.TITANIUM, CardType.DEBIT, LocalDate.now());
 
 			client1.addCards( card1 );
 			client1.addCards( card2 );

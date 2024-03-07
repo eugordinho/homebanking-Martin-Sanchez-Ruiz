@@ -35,9 +35,10 @@ public class WebConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/auth/**, */h2-console/**").permitAll()
-                                .anyRequest().authenticated())
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                                .requestMatchers("/api/auth/login, /api/auth/register").permitAll()
+                                .requestMatchers("/api/auth/current").hasRole("CLIENT")
+                                .anyRequest().hasRole("ADMIN"))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) //??
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
