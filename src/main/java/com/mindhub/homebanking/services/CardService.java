@@ -17,7 +17,7 @@ public interface CardService {
 
     List<CardDTO> getAllCardsDTOByClient(Client client);
 
-    Boolean getCardByTypeAndColorAndClient(CardType type, CardColor color, Client client);
+    /*Boolean getCardByTypeAndColorAndClient(CardType type, CardColor color, Client client);*/
 
     Card getCardByNumber(String number);
 

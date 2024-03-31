@@ -27,23 +27,27 @@ public class CreateAccController {
     private ClientService clientService;
     @Autowired
     private AccountService accountService;
-    @Autowired
     private RandomNumber randomNumber;
+    @Autowired
+    private ClientRepository clientRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
     @GetMapping("/accounts")
     public ResponseEntity<?> getAllAccounts() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientService.getClientByEmail(email);
+        Client client = clientRepository.findByMail(email);
+        List<AccountDTO> accountDTOS = client.getAccountSet().stream().map(AccountDTO::new).collect(Collectors.toList());
 
-        return ResponseEntity.ok(accountService.getAllAccountsDTOByAccountHolder(client));
+        return ResponseEntity.ok(accountDTOS);
     }
 
     @PostMapping("/accounts")
     public ResponseEntity<?> createAccount(){
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientService.getClientByEmail(userMail);
+        Client client = clientRepository.findByMail(userMail);
 
-        List<Account> accounts = accountService.getAllAccountsByAccountHolder(client);
+        List<Account> accounts = client.getAccountSet().stream().toList();
 
         if(accounts.size() < 3){
             String accountNumber;

@@ -55,12 +55,12 @@ public class CardController {
             return new ResponseEntity<>("The color field cannot be empty", HttpStatus.FORBIDDEN);
         }
 
-        Boolean cardExist = cardService.getCardByTypeAndColorAndClient(CardType.valueOf(cardRequestDTO.type()), CardColor.valueOf(cardRequestDTO.color()), client);
+/*        Boolean cardExist = cardService.getCardByTypeAndColorAndClient(CardType.valueOf(cardRequestDTO.type()), CardColor.valueOf(cardRequestDTO.color()), client);
 
         if(cardExist){
             return new ResponseEntity<>("You already have one card with type " + cardRequestDTO.type() + " and color " +
                     cardRequestDTO.color(), HttpStatus.FORBIDDEN);
-        }
+        }*/
 
 
         String cardNumber;

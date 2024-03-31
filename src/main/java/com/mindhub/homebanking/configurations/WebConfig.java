@@ -25,9 +25,13 @@ public class WebConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -36,8 +40,8 @@ public class WebConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/auth/login, /api/auth/register").permitAll()
-                                .requestMatchers("/api/auth/current").hasRole("CLIENT")
-                                .anyRequest().hasRole("ADMIN"))
+                                .requestMatchers("/api/auth/current", "/api/clients/current/accounts", "/api/clients/current/cards", "/api/clients/current/loans", "/api/clients/current/transactions").hasRole("CLIENT")
+                                .anyRequest().permitAll())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) //??
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

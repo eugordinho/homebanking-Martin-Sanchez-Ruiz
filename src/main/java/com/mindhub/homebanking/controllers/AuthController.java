@@ -7,6 +7,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.securityServices.JwtUtilService;
+import com.mindhub.homebanking.securityServices.UserDetailsServiceImpl;
 import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.utils.RandomNumber;
@@ -31,7 +32,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private JwtUtilService jwtUtilService;
@@ -50,12 +51,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){
+
         try {
-            if(clientService.getClientByEmail(loginDTO.email()) == null){
-                return new ResponseEntity<>("The email entered is not valid", HttpStatus.FORBIDDEN);
+            Client client = clientService.getClientByEmail(loginDTO.email());
+
+            if(client == null){
+                return new ResponseEntity<>("The entered email is not valid", HttpStatus.FORBIDDEN);
             }
 
-            if(!passwordEncoder.matches(loginDTO.password(), clientService.getClientByEmail(loginDTO.email()).getPassword())) {
+            if(!passwordEncoder.matches(loginDTO.password(), client.getPassword())) {
                 return new ResponseEntity<>("The password entered is not valid", HttpStatus.FORBIDDEN);
             }
 

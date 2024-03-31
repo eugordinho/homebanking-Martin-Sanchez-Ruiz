@@ -19,7 +19,6 @@ public class Card {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn( name = "Client_id")
     private Client client;
-
     private String cardHolder;
 
     public Card(){}

@@ -14,7 +14,6 @@ import java.util.List;
 
 //controlador: escucha y envia respuestas http
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping( "/api/clients" )
 public class ClientController {
     //servlets: responden una peticion en especifico

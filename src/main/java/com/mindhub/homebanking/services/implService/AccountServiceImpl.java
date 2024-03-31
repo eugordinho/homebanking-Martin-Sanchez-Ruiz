@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -18,37 +19,37 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> getAllAccounts() {
-        return null;
+        return accountRepository.findAll();
     }
 
     @Override
     public List<AccountDTO> getAllAccountsDTO() {
-        return null;
+        return getAllAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
     }
 
     @Override
     public List<Account> getAllAccountsByAccountHolder(Client AccountHolder) {
-        return null;
+        return AccountHolder.getAccountSet().stream().toList();
     }
 
     @Override
     public List<AccountDTO> getAllAccountsDTOByAccountHolder(Client AccountHolder) {
-        return null;
+        return getAllAccountsByAccountHolder(AccountHolder).stream().map(AccountDTO::new).collect(Collectors.toList());
     }
 
     @Override
     public Boolean getAccountByNumberAndAccountHolder(String number, Client accountHolder) {
-        return null;
+        return getAllAccountsByAccountHolder(accountHolder).stream().anyMatch(account -> account.getNumber().equals(number));
     }
 
     @Override
     public Account getAccountByNumber(String number) {
-        return null;
+        return accountRepository.findByNumber(number);
     }
 
     @Override
     public void saveAccount(Account account) {
-
+        accountRepository.save(account);
     }
 }
 
